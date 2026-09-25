@@ -10,8 +10,15 @@
 //    DÉCROISSANTS. La liste reçue ne doit pas être modifiée.
 //    À points égaux, celui qui a le plus de victoires passe devant.
 function trierParPoints(liste) {
-  // À COMPLÉTER
+  // On utilise le spread operator [...] pour cloner la liste et ne pas modifier l'originale
+  return [...liste].sort((a, b) => {
+    if (a.points !== b.points) {
+      return b.points - a.points;
+    }
+    return b.victoires - a.victoires;
+  });
 }
+
 
 // 2. remplirTableau(idCorps, liste) : remplit le <tbody> dont l'id est fourni.
 //    Une ligne <tr> par entrée, avec dans l'ordre les cellules <td> :

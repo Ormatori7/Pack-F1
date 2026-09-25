@@ -118,7 +118,7 @@ public class Classement {
             return 0.0;
         }
         
-        // Arrondi à deux décimales
         return Math.round((somme / compte) * 100.0) / 100.0;
     }
-}
+}        // Arrondi à deux décimales
+
