@@ -43,7 +43,6 @@ public class Classement {
 
         for (Ligne ligne : lignes) {
             String nom = ligne.pilote();
-            // Le constructeur Resultat attend le nom et l'écurie
             pilotes.putIfAbsent(nom, new Resultat(nom, ligne.ecurie()));
             
             Resultat res = pilotes.get(nom);
@@ -67,15 +66,40 @@ public class Classement {
 
         return classement;
     }
+
+    // on regroupe les résultats pour creer une fiche par pilote
+    // on ajoute ses points par rapport à sa position à chaque course
+    // on compte le nombre de fois où il finit en 1er ou 2ème position
+    // on transforme le tout en liste pour préparer le classement final
+    // on trie les pilotes en comparant d'abord leurs points
+    // en cas d'égalité on regarde les victoires, puis les 2èmes places, puis l'ordre alphabétique
 // ! fin fonction
 
     // 3. classementEcuries(pilotes) : additionne les points, victoires et
     //    2e places des pilotes de chaque écurie. Même ordre de tri.
     public static List<Resultat> classementEcuries(List<Resultat> pilotes) {
-        // À COMPLÉTER
-        return null;
-    }
+        Map<String, Resultat> ecuries = new HashMap<>();
 
+        for (Resultat p : pilotes) {
+            String nomEcurie = p.ecurie;
+            ecuries.putIfAbsent(nomEcurie, new Resultat(nomEcurie, ""));
+            
+            Resultat res = ecuries.get(nomEcurie);
+            res.points += p.points;
+            res.victoires += p.victoires;
+            res.deuxiemes += p.deuxiemes;
+        }
+
+        List<Resultat> classement = new ArrayList<>(ecuries.values());
+        classement.sort((r1, r2) -> {
+            if (r1.points != r2.points) return Integer.compare(r2.points, r1.points);
+            if (r1.victoires != r2.victoires) return Integer.compare(r2.victoires, r1.victoires);
+            if (r1.deuxiemes != r2.deuxiemes) return Integer.compare(r2.deuxiemes, r1.deuxiemes);
+            return r1.nom.compareTo(r2.nom);
+        });
+
+        return classement;
+    }
     // 4. positionMoyenne(lignes, pilote) : moyenne des positions de ce pilote,
     //    ABANDONS EXCLUS, arrondie à 2 décimales. 0 s'il n'a jamais terminé.
     //    Ex. positions 1, 2 et un abandon -> 1.5
