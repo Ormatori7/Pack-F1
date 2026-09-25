@@ -19,6 +19,11 @@ public class Classement {
     //    Un abandon vaut la position 0, donc 0 point.
     public static int pointsPourPosition(int position) {
         // À COMPLÉTER
+
+        if (position >= 1 && position <= 10) {
+            return BAREME[position -1];
+            
+        }
         return 0;
     }
 
