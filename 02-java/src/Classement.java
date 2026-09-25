@@ -8,6 +8,9 @@
    ========================================================================= */
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.ArrayList;
 
 public class Classement {
 
@@ -25,15 +28,46 @@ public class Classement {
             
         }
         return 0;
+        // on regarde si la position est bien entre la 1 et la 10
+        // si oui on attribut les points par rapport a la position 
+        // si non on met automatiquement 0
     }
 
+    // ! début fonction
+    
     // 2. classementPilotes(lignes) : un Resultat par pilote, avec ses points,
     //    ses victoires (position 1) et ses 2e places, trié par :
     //    points décroissants, puis victoires, puis 2e places, puis nom (A→Z).
-    public static List<Resultat> classementPilotes(List<Ligne> lignes) {
-        // À COMPLÉTER
-        return null;
+     public static List<Resultat> classementPilotes(List<Ligne> lignes) {
+        Map<String, Resultat> pilotes = new HashMap<>();
+
+        for (Ligne ligne : lignes) {
+            String nom = ligne.pilote();
+            // Le constructeur Resultat attend le nom et l'écurie
+            pilotes.putIfAbsent(nom, new Resultat(nom, ligne.ecurie()));
+            
+            Resultat res = pilotes.get(nom);
+            int pos = ligne.position();
+            
+            res.points += pointsPourPosition(pos);
+            if (pos == 1) {
+                res.victoires++;
+            } else if (pos == 2) {
+                res.deuxiemes++;
+            }
+        }
+
+        List<Resultat> classement = new ArrayList<>(pilotes.values());
+        classement.sort((r1, r2) -> {
+            if (r1.points != r2.points) return Integer.compare(r2.points, r1.points);
+            if (r1.victoires != r2.victoires) return Integer.compare(r2.victoires, r1.victoires);
+            if (r1.deuxiemes != r2.deuxiemes) return Integer.compare(r2.deuxiemes, r1.deuxiemes);
+            return r1.nom.compareTo(r2.nom);
+        });
+
+        return classement;
     }
+// ! fin fonction
 
     // 3. classementEcuries(pilotes) : additionne les points, victoires et
     //    2e places des pilotes de chaque écurie. Même ordre de tri.
