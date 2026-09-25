@@ -104,7 +104,21 @@ public class Classement {
     //    ABANDONS EXCLUS, arrondie à 2 décimales. 0 s'il n'a jamais terminé.
     //    Ex. positions 1, 2 et un abandon -> 1.5
     public static double positionMoyenne(List<Ligne> lignes, String pilote) {
-        // À COMPLÉTER
-        return 0;
+        double somme = 0;
+        int compte = 0;
+
+        for (Ligne ligne : lignes) {
+            if (ligne.pilote().equals(pilote) && ligne.position() > 0) {
+                somme += ligne.position();
+                compte++;
+            }
+        }
+
+        if (compte == 0) {
+            return 0.0;
+        }
+        
+        // Arrondi à deux décimales
+        return Math.round((somme / compte) * 100.0) / 100.0;
     }
 }
